@@ -1284,9 +1284,6 @@ function(libname, pkgname) {
       pval <- 2 * pnorm(abs(tstat), lower.tail = FALSE)
       return(pval)
     }
-  	if (model.name %in% c("ergm")) {
-  	  return(.summary.object$coefs[,4])
-  	}
     if (model.name %in% c("clm")) {
       if (.format.ordered.intercepts == FALSE) {
         return(.summary.object$coefficients[(length(object.name$alpha)+1):(length(object.name$coefficients)),4])
@@ -1317,7 +1314,7 @@ function(libname, pkgname) {
   	else if (model.name %in% c("normal.gam", "logit.gam", "probit.gam", "poisson.gam", "gam()")) {
   		return(.summary.object$p.pv)
   	}
-  	else if (model.name %in% c("coxph", "clogit")) {
+  	else if (model.name %in% c("coxph", "clogit", "ergm")) {
   		return(.summary.object$coef[,"Pr(>|z|)"])
   	}
   	else if (model.name %in% c("exp","lognorm","weibull","tobit", "survreg()")) {
@@ -1551,9 +1548,6 @@ function(libname, pkgname) {
     if (model.name %in% c("lagsarlm", "errorsarlm")) {
       return(.summary.object$Coef[,2])
     }    
-  	if (model.name %in% c("ergm")) {
-  	  return(.summary.object$coefs[,2])
-  	}
     if (model.name %in% c("rq","felm")) {
       return(.summary.object$coefficients[,2])
     }
@@ -1605,7 +1599,7 @@ function(libname, pkgname) {
   	else if (model.name %in% c("arima")) {
   		return( sqrt(diag(object.name$var.coef)) )
   	}
-  	else if (model.name %in% c("tobit(AER)")){
+  	else if (model.name %in% c("tobit(AER)", "ergm")){
   	  return(.summary.object$coefficients[,"Std. Error"])
   	}
   	else if (model.name %in% c("multinom")) {
@@ -1834,9 +1828,6 @@ function(libname, pkgname) {
   	  
   	  return(tstat)
   	}
-  	if (model.name %in% c("ergm")) {
-  	  return((.summary.object$coefs[,1])/(.summary.object$coefs[,2]))
-  	}
     if (model.name %in% c("lagsarlm", "errorsarlm")) {
       return(.summary.object$Coef[,3])
     }    
@@ -1889,7 +1880,7 @@ function(libname, pkgname) {
   	else if (model.name %in% c("arima")) {
   		return( object.name$coef / (sqrt(diag(object.name$var.coef))) )
   	}
-  	else if (model.name %in% c("tobit(AER)")){
+  	else if (model.name %in% c("tobit(AER)", "ergm")){
   	  return(.summary.object$coefficients[,"z value"])
   	}
   	else if (model.name %in% c("multinom")) {
@@ -2734,7 +2725,7 @@ function(libname, pkgname) {
 
   	model.name <- .get.model.name(object.name)
 
-  	if (!(model.name %in% c("arima","fGARCH","Arima","coeftest","Gls","lmer","glmer","nlmer", "ergm"))) {
+  	if (!(model.name %in% c("arima","fGARCH","Arima","coeftest","Gls","lmer","glmer","nlmer"))) {
   	  if (model.name %in% c("rem.dyad", "mclogit")) {
   	    null.deviance.value <- object.name$null.deviance
   	    null.deviance.output <- as.vector(c(null.deviance.value, NA, NA))
@@ -2744,6 +2735,11 @@ function(libname, pkgname) {
         df.value <- object.name$w$df.null
         null.deviance.output <- as.vector(c(null.deviance.value, df.value, NA))
   	  }
+      else if (model.name %in% c("ergm")) {
+        null.deviance.value <- .summary.object$devtable["Null", "Resid. Dev"]
+        df.value <- .summary.object$devtable["Null", "Resid. Df"]
+        null.deviance.output <- as.vector(c(null.deviance.value, df.value, NA))
+      }
   		else if (!is.null(suppressMessages(.summary.object$null.deviance))) {
   			null.deviance.value <- suppressMessages(.summary.object$null.deviance)
   			df.value <- object.name$df.null
