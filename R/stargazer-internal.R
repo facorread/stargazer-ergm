@@ -4735,7 +4735,7 @@ function(libname, pkgname) {
   	model.name <- .get.model.name(object.name)
 	
   	if (model.name %in% c("ls", "normal", "logit", "probit", "relogit", "poisson", "negbin", "normal.survey", "poisson.survey", "probit.survey", "logit.survey", "gamma", "gamma.survey",
-     				    "cloglog.net", "gamma.net", "logit.net", "probit.net", "brglm", "glm()", "Glm()", "svyglm()", "plm", "pgmm", "ivreg", "lmrob", "glmrob", "dynlm", "gmm", "mclogit")) {
+     				    "cloglog.net", "gamma.net", "logit.net", "probit.net", "brglm", "glm()", "Glm()", "svyglm()", "plm", "pgmm", "ivreg", "lmrob", "glmrob", "dynlm", "gmm", "mclogit", "ergm")) {
   		return(.summary.object$coefficients[,"Estimate"])
   	}
   	if (model.name %in% c("Arima")) {
@@ -4780,9 +4780,6 @@ function(libname, pkgname) {
     if (model.name %in% c("lmer","glmer","nlmer")) {
       coefs <- .summary.object$coefficients[,1]
       return(coefs)
-    }
-    if (model.name %in% c("ergm")) {
-      return(.summary.object$coefs[,1])
     }
     if (model.name %in% c("lagsarlm", "errorsarlm")) {
       return(.summary.object$Coef[,1])
