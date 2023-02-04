@@ -626,7 +626,7 @@ function(libname, pkgname) {
   	if (part=="variable name") {
     
   		# use intercept name for intercept, otherwise variable name
-      if (is.na(.format.covariate.labels[.which.variable.label])) {
+      if (all(is.na(.format.covariate.labels[.which.variable.label]))) {
         if (.format.coefficient.variables.capitalize == TRUE) { cat(" ", .format.coefficient.variables.left, toupper(variable.name), .format.coefficient.variables.right, sep="") }
   		  else { cat(" ", .format.coefficient.variables.left, variable.name, .format.coefficient.variables.right, sep="") }
       }
@@ -1981,7 +1981,7 @@ function(libname, pkgname) {
       
       if (!is.character(s)) { return("") }
       if (is.null(s)) { return("") }
-      if (is.na(s)) { return("") }
+      if (all(is.na(s))) { return("") }
       if (s=="") { return("") }
       if (length(s) > 1) { return("") }
       
@@ -2008,7 +2008,7 @@ function(libname, pkgname) {
       x.original <- x
       first.part <- ""
       
-      if (is.na(x) || is.null(x)) { return("") }
+      if (all(is.na(x)) || is.null(x)) { return("") }
       
       if (simply.output == TRUE) {
         if (!is.numeric(x)) { return(.remove.special.chars(x)) }
@@ -3032,7 +3032,7 @@ function(libname, pkgname) {
 
   	# first for vectors (statistics without, say, degrees of freedom)
   	if (is.vector(.global.var.name) == TRUE) {
-  		if (sum(!is.na(.global.var.name))!=0) {
+  		if (any(!is.na(.global.var.name))) {
   			cat (.format.var.name)
   			for (i in seq(1:length(.global.models))) {
   	 			if (!is.na(.global.var.name[i])) { 
@@ -3050,7 +3050,7 @@ function(libname, pkgname) {
   		}
   	}
   	else if ((is.matrix(.global.var.name) == TRUE) && (type.se == FALSE)) {     # for statistics that have degrees of freedom
-  		if (sum(!is.na(as.vector(.global.var.name["statistic",])))!=0) {
+  		if (any(!is.na(as.vector(.global.var.name["statistic",])))) {
 
 	  		# intelligent df reporting (figure out whether only report it on left side, or also)
 	  		report.df.left.column <- FALSE
@@ -3148,7 +3148,7 @@ function(libname, pkgname) {
   		}
   	}
   	else if ((is.matrix(.global.var.name) == TRUE) && (type.se == TRUE)) {       # for statistics that have a standard error
-  	  if (sum(!is.na(as.vector(.global.var.name["statistic",])))!=0) {
+  	  if (any(!is.na(as.vector(.global.var.name["statistic",])))) {
 	    
   	    # write down the line	
   	    cat (.format.var.name)
@@ -4330,7 +4330,7 @@ function(libname, pkgname) {
       if ((is.numeric(object[,i]) == TRUE) || (is.logical(object[,i]) && (.format.summ.logical==TRUE))) {
         
         # also omit if all missing values
-        if (!any(!is.na(object[,i]))) { omitted <- TRUE }
+        if (all(is.na(object[,i]))) { omitted <- TRUE }
         
         if (!is.null(.format.omit.regexp)) {
           for (j in seq(1:length(.format.omit.regexp))) {
